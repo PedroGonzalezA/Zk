@@ -63,10 +63,15 @@ public class Composer extends GenericForwardComposer<Component>{
 										textoRango(nombreC,direcciones,edadF,anoNaci,anoT,montoF);
 									}else {
 										if(anoNaci<1970) {
-											alert("Eres demasiado grande para este empreo");
+											alert("Eres demasiado grande para este empleo");
 										}else {
 											//metodo fuera del rango
-											textoFueraR(nombreC,direcciones,edadF,anoNaci,anoT);
+											int anT= edadF-anoT;
+											if(anT>=22) {
+												textoFueraR(nombreC,direcciones,edadF,anoNaci,anoT);
+											}else {
+												alert("Datos erroneos años y fecha de ingreso no son validos");
+											}
 										}
 									}
 								}
@@ -90,8 +95,7 @@ public class Composer extends GenericForwardComposer<Component>{
 	public int CalculoA(int edadf) {
 		int anoNacimiento = anoActual - edadf;
 		return anoNacimiento;
-	}
-	
+	}	
 	//calcularAños Antiguedad
 	public int CalculoAnot(String fecha) {
 		String numbers =fecha.substring(Math.max(0, fecha.length() - 4));
@@ -112,7 +116,7 @@ public class Composer extends GenericForwardComposer<Component>{
         {	
             FileWriter fw = new FileWriter(filePath1, true);
             BufferedReader br = new BufferedReader(new FileReader(file1)); 
-            if(anoTrabaj>15) {
+            if(anoTrabaj>=15) {
             	String  lineToAppend = + br.lines().count()+ " | "+ nombres2+" | "+direccion2+" | "+edades+" | "+ anoNacimiento +" | "+ montoF+"\n" ;    
   	    		fw.write(lineToAppend);
   	            fw.close();
