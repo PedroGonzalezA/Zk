@@ -38,11 +38,4 @@
 			</row>
 		</rows>
 	</grid>
-	
-	 <style>
-        .titulo {
-            background: black;
-            color:white;
-        }
-    </style>
 </window>
