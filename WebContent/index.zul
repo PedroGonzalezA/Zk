@@ -1,4 +1,4 @@
-<?page title="Auto Generated index.zul"?>
+<?page title="Monto de antiguedad"?>
 <window title="Monto de antiguedad" border="normal" width="100%" height="100%" apply="mx.com.controller.Composer">
 	<grid>
 	<columns >

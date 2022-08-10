@@ -52,7 +52,7 @@ public class Composer extends GenericForwardComposer<Component>{
 					        java.util.Date fechaIc = fecha.getValue(); //variable fecha de ingreso 
 					        LocalDate localDate1 = fechaIc.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();  //convertir a localdate 
 							int anoT = CalculoAnot(fechaI);//variable años de trabajo
-							int montoF = CalculoMontoA(fechaI);//variable monto de antiguedad
+							int montoF = CalculoMontoA(anoT);//variable monto de antiguedad
 							 //condicion mayor a 22 años
 							if(edadF>=22) {
 								if(localDate1.isAfter(todaysDate)) {
@@ -104,10 +104,8 @@ public class Composer extends GenericForwardComposer<Component>{
 		return antiguedadF;
 	}
 	//calcular monto antiguedad 
-	public int CalculoMontoA(String fecha) {
-		String numbers =fecha.substring(Math.max(0, fecha.length() - 4));
-		int antiguedad  = Integer.parseInt(numbers);
-		int antiguedadF= antiguedad * 125;
+	public int CalculoMontoA(int anoT) {
+		int antiguedadF= anoT * 125;
 		return antiguedadF;
 	}	
 	//Txt15AÑOS
