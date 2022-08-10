@@ -1,0 +1,25 @@
+<?page title="Auto Generated index.zul"?>
+<window title="Practica" border="normal" width="100%" height="100%" apply="mx.com.controller.Composer">
+	<hbox>
+		<cell width="100%">
+			<label value="Agregue un usuario"/>
+		</cell>
+	</hbox>
+	<hbox style="padding-top:10px;">
+		<cell width="15%" style="padding:5px;">
+			<label value="Nombre completo"></label><textbox id="nombres"></textbox>
+		</cell>
+		<cell width="15%" style="padding:5px;">
+			<label value="Dirección completa"></label><textbox id="direccion"></textbox>
+		</cell>
+		<cell width="10%" style="padding:5px;">
+			<label value="Edad"></label><textbox id="edad"></textbox>
+		</cell>
+		<cell width="20%" style="padding:5px;">
+			<label value="Fecha Ingreso"></label><datebox id="fecha"></datebox>
+		</cell>
+		<cell width="50%" style="padding:20px;" id="Agregar">
+			<button label="Agregar" style="" id="btnAgregar"></button>
+		</cell>
+	</hbox>
+</window>
