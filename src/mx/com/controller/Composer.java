@@ -34,8 +34,8 @@ public class Composer extends GenericForwardComposer<Component>{
 	public void onClick$btnAgregar() throws ParseException{
 		String nombreC = nombres.getValue();
 		String direcciones = direccion.getValue();
-		try {
-			String edades = edad.getValue();
+		String edades = edad.getValue();
+		if(isNumeric(edades)==true) {
 			if(nombreC.isEmpty()) {
 				alert("El nombre esta vacio");
 			}else {
@@ -86,10 +86,11 @@ public class Composer extends GenericForwardComposer<Component>{
 					}
 				}
 			}
-		}
-		catch (Exception ex) {
+		}else {
 			alert("La edad solo debe de ser numeros");
 		}
+			
+		
 	}
 	//calcular monto antiguedad 
 	public int CalculoA(int edadf) {
@@ -107,7 +108,16 @@ public class Composer extends GenericForwardComposer<Component>{
 	public int CalculoMontoA(int anoT) {
 		int antiguedadF= anoT * 125;
 		return antiguedadF;
-	}	
+	}
+	//es numero
+	public static boolean isNumeric(String cadena){
+		try {
+			Integer.parseInt(cadena);
+			return true;
+		} catch (NumberFormatException nfe){
+			return false;
+		}
+	}
 	//Txt15AÑOS
 	public void textoRango(String nombres2,String direccion2, int edades,int anoNacimiento,int anoTrabaj,int montoF) {
 		try
