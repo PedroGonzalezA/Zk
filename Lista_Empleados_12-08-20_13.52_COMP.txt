@@ -1,0 +1,3 @@
+No | Nombre Empleado   |           Dirección          | Edad | Año Nacimiento |
+1  |    Jesus Araujo   | reg 103 calle 30 mz 50 lt 27 |  23  |      1999      |
+2  |    Alonso Euan    | Reg 102 callle 56 lote 27    |  25  |      1997      |

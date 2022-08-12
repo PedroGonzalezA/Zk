@@ -7,28 +7,35 @@ import org.zkoss.zul.Datebox;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
-
+import java.time.format.DateTimeFormatter;
 public class Composer extends GenericForwardComposer<Component>{
 	private Textbox nombres;
 	private Textbox direccion;
 	private Textbox edad;
 	private Datebox fecha;
+	
 	private LocalDate todaysDate = LocalDate.now();
+	private LocalDateTime horaA =LocalDateTime.now();
+	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+	String hora =dtf.format(horaA);
 	private int anoActual = todaysDate.getYear();
-    String filePath1 = "C:\\Users\\Pister\\Desktop\\Lista_Empleados_DDMMYYYY_HHMM.txt";
-    File file1 = new File("C:\\Users\\Pister\\Desktop\\Lista_Empleados_DDMMYYYY_HHMM.txt");
-    String filePath2 = "C:\\Users\\Pister\\Desktop\\Lista_Empleados_DDMMYYYY_HHMM_COMP.txt";
-    File file2 = new File("C:\\Users\\Pister\\Desktop\\Lista_Empleados_DDMMYYYY_HHMM_COMP.txt");
+	File file3 = new File("C:\\Users\\Pister\\Desktop\\fecha.txt");
+	FileWriter fw=null;
+	BufferedReader br=null;
 	private static final long serialVersionUID = -2159669591652109433L;
 
 	@Override
 	public void doAfterCompose(Component comp) throws Exception {
 		super.doAfterCompose(comp);
+		fechaH(hora);
 	}
 	//funcion click
 	public void onClick$btnAgregar() throws ParseException{
@@ -48,8 +55,8 @@ public class Composer extends GenericForwardComposer<Component>{
 						try {
 							int edadF = Integer.parseInt(edades);
 							int anoNaci = CalculoA(edadF);
-							String fechaI = fecha.getValue().toString();//variable fecha de ingreso
-					        java.util.Date fechaIc = fecha.getValue(); //variable fecha de ingreso 
+							String fechaI = fecha.getValue().toString();//variable fecha de ingreso para funciones
+					        java.util.Date fechaIc = fecha.getValue(); //variable fecha de ingreso para condiciones
 					        LocalDate localDate1 = fechaIc.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();  //convertir a localdate 
 							int anoT = CalculoAnot(fechaI);//variable años de trabajo
 							int montoF = CalculoMontoA(anoT);//variable monto de antiguedad
@@ -75,7 +82,6 @@ public class Composer extends GenericForwardComposer<Component>{
 										}
 									}
 								}
-								
 							}else {
 								alert("La edad es menor a 22");
 							}
@@ -89,8 +95,6 @@ public class Composer extends GenericForwardComposer<Component>{
 		}else {
 			alert("La edad solo debe de ser numeros");
 		}
-			
-		
 	}
 	//calcular monto antiguedad 
 	public int CalculoA(int edadf) {
@@ -118,43 +122,120 @@ public class Composer extends GenericForwardComposer<Component>{
 			return false;
 		}
 	}
+	public String hora(String dato) {
+		String horaM =dato.substring(Math.max(0, dato.length() -5));
+		String horaF = horaM.replace(":", ".");
+		return horaF;
+	}
+	public String fecha(String dato) {
+		String fecha =dato.substring(0,8);
+		String fechaF = fecha.replace("/", "-");
+		return fechaF;
+	}
+	public void fechaH(String dato) {
+		FileWriter fw=null;
+        String FyH=fecha(dato)+"_"+hora(dato) ;
+		try {
+			if(!file3.exists()){
+				file3.createNewFile();
+		        fw = new FileWriter(file3, true);
+		     	String  lineToAppend = FyH;
+		     	fw.write(lineToAppend);
+		        fw.close();
+		        System.out.println("Hora agregada");
+			}else {
+		        System.out.println("El arhivo de txt ya existe");
+			}
+		}catch(IOException e){
+            alert(e.toString());
+		}
+	}
+	public String horaF() {
+		String horaF="";
+		try {
+			BufferedReader obj = new BufferedReader(new FileReader(file3));
+			 horaF=obj.readLine();
+			 return horaF;	        
+		}catch(Exception e) {
+            alert(e.toString());
+            return horaF;	
+		}
+            
+	}
+	
 	//Txt15AÑOS
 	public void textoRango(String nombres2,String direccion2, int edades,int anoNacimiento,int anoTrabaj,int montoF) {
 		try
         {	
-            FileWriter fw = new FileWriter(filePath1, true);
-            BufferedReader br = new BufferedReader(new FileReader(file1)); 
-            if(anoTrabaj>=15) {
-            	String  lineToAppend = + br.lines().count()+ " | "+ nombres2+" | "+direccion2+" | "+edades+" | "+ anoNacimiento +" | "+ montoF+"\n" ;    
-  	    		fw.write(lineToAppend);
-  	            fw.close();
-  	            alert("Agregado con exito");
+		    File file1 = new File("C:\\Users\\Pister\\Desktop\\Lista_Empleados_"+horaF()+".txt");
+            if(!file1.exists()) {
+            	file1.createNewFile();
+                fw = new FileWriter(file1, true);
+             	String  lineToAppend = "No"+ " | "+"Nombre Empleado "+"  |           "+"Dirección"+"          | "+"Edad"+" | "+ "Año Nacimiento" +" | "+ "Monto antiguedad"+" | "+"\n" ;    
+             	fw.write(lineToAppend);
+   	            fw.close();
+   	            alert("Archivo creado");
             }else {
-            	String  lineToAppend =+ br.lines().count()+" | "+ nombres2+" | "+direccion2+" | "+edades+" | "+ anoNacimiento +" | "+"\n" ;    
-     			fw.write(lineToAppend);
-                fw.close();
-  	            alert("Agregado con exito");
+            	 if(anoTrabaj>=15) {
+                    fw = new FileWriter(file1, true);
+                    br = new BufferedReader(new FileReader(file1)); 
+                 	String  lineToAppend = + br.lines().count()+ "  |    "+ nombres2+"    | "+direccion2+" |  "+edades+"  |      "+ anoNacimiento +"      |       "+ montoF+"       | "+"\n" ;    
+       	    		fw.write(lineToAppend);
+       	            fw.close();
+       	            alert("Agregado con exito");
+       	            limpiarP();
+       	            
+                 }else {
+                	fw = new FileWriter(file1, true);
+                    br = new BufferedReader(new FileReader(file1)); 
+                 	String  lineToAppend = + br.lines().count()+ "  |    "+ nombres2+"    | "+direccion2+" |  "+edades+"  |      "+ anoNacimiento +"      |"+"\n" ;    
+          			fw.write(lineToAppend);
+                    fw.close();
+       	            alert("Agregado con exito");
+       	            limpiarP();
+                 }
             }
+           
         }
         catch(Exception e)
         {
-            System.out.println(e);
+            alert(e.toString());
         }
 	}
 	//TXTMENOS DE 15
 	public void textoFueraR(String nombres2,String direccion2, int edades,int anoNacimiento,int anoTrabaj) {
 		try
         {
-	        FileWriter fw = new FileWriter(filePath2, true);    
-			BufferedReader br = new BufferedReader(new FileReader(file2)); 
-	        String  lineToAppend =+ br.lines().count()+" | "+ nombres2+" | "+direccion2+" | "+edades+" | "+ anoNacimiento +" | "+"\n" ;    
-	        fw.write(lineToAppend);
-	        fw.close();
-            alert("Agregado con exito");
+		    File file2 = new File("C:\\Users\\Pister\\Desktop\\Lista_Empleados_"+horaF()+"_COMP.txt");
+            if(!file2.exists()) {
+            	file2.createNewFile();
+                fw = new FileWriter(file2, true);
+             	String  lineToAppend = "No"+ " | "+"Nombre Empleado "+"  |           "+"Dirección"+"          | "+"Edad"+" | "+ "Año Nacimiento" +" |"+"\n" ;    
+             	fw.write(lineToAppend);
+   	            fw.close();
+   	            alert("Archivo creado");
+            }else {
+            	fw = new FileWriter(file2, true);  
+    		    br = new BufferedReader(new FileReader(file2)); 
+             	String  lineToAppend = + br.lines().count()+ "  |    "+ nombres2+"    | "+direccion2+" |  "+edades+"  |      "+ anoNacimiento +"      |"+"\n" ;    
+    	        fw.write(lineToAppend);
+    	        fw.close();
+                alert("Agregado con exito");
+                limpiarP();
+            }
+            	
+		    
         }
         catch(Exception e)
         {
-            System.out.println(e);
+            alert(e.toString());
         }
+	}
+	//limpiar pantalla
+	public void limpiarP(){
+          nombres.setText("");
+          direccion.setText("");
+          edad.setText("");
+          fecha.setText("");
 	}
 }

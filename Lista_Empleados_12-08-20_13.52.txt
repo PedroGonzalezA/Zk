@@ -1,0 +1,3 @@
+No | Nombre Empleado   |           Dirección          | Edad | Año Nacimiento | Monto antiguedad | 
+1  |    pedro jesus    | reg 103 calle 30 mz 50 lt 27 |  44  |      1972      |       1875       | 
+2  |    jesus araujo   | reg 103 calle 30 mz 50 lt 27 |  50  |      1972      |       2750       | 
